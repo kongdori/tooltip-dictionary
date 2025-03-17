@@ -637,7 +637,7 @@
        */
       exports.changeIcon = function (isActive) {
         var iconPaths = isActive ? activeIcons : inactiveIcons;
-        chrome.browserAction.setIcon({ path: iconPaths });
+        chrome.action.setIcon({ path: iconPaths });
       };
     },
     {}
