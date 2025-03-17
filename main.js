@@ -1,301 +1,648 @@
-!(function e(t, n, o) {
-    function r(a, u) {
-        if (!n[a]) {
-            if (!t[a]) {
-                var c = "function" == typeof require && require;
-                if (!u && c) return c(a, !0);
-                if (i) return i(a, !0);
-                var s = new Error("Cannot find module '" + a + "'");
-                throw ((s.code = "MODULE_NOT_FOUND"), s);
-            }
-            var l = (n[a] = { exports: {} });
-            t[a][0].call(
-                l.exports,
-                function (e) {
-                    var n = t[a][1][e];
-                    return r(n || e);
-                },
-                l,
-                l.exports,
-                e,
-                t,
-                n,
-                o
-            );
+/*!
+ * Tooltip Dictionary
+ * Unminified version of main.js
+ */
+(function browserifyShim(modules, cache, entryPoints) {
+  function require(moduleName, calledFromParent) {
+    if (!cache[moduleName]) {
+      if (!modules[moduleName]) {
+        var requireFunction = typeof window.require === "function" && window.require;
+        if (!calledFromParent && requireFunction) {
+          return requireFunction(moduleName, true);
         }
-        return n[a].exports;
+        if (typeof window.require === "function") {
+          return window.require(moduleName, true);
+        }
+        var error = new Error("Cannot find module '" + moduleName + "'");
+        error.code = "MODULE_NOT_FOUND";
+        throw error;
+      }
+
+      var moduleObject = cache[moduleName] = { exports: {} };
+      modules[moduleName][0].call(
+        moduleObject.exports,
+        function (item) {
+          var subModuleName = modules[moduleName][1][item];
+          return require(subModuleName || item);
+        },
+        moduleObject,
+        moduleObject.exports,
+        browserifyShim,
+        modules,
+        cache,
+        entryPoints
+      );
     }
-    for (var i = "function" == typeof require && require, a = 0; a < o.length; a++) r(o[a]);
-    return r;
-})(
-    {
-        1: [
-            function (e, t, n) {
-                "use strict";
-                function o(e) {
-                    return /[ \f\n\r\t\v\u00A0\u2028\u2029]/.test(e);
-                }
-                function r(e) {
-                    return /[\^\$\!\@\#\%\&\*\-\_\=\+\,\.\:\/\;\"\'\(\)\[\]\{\<\>}]/.test(e);
-                }
-                function i(e) {
-                    return !e || /^(BR|DIV|P|PRE|TD|TR|TABLE)$/i.test(e.nodeName);
-                }
-                function a(e) {
-                    var t = null;
-                    return e.nextSibling ? (t = e.nextSibling) : e.parentNode && e.parentNode.nextSibling && (t = e.parentNode.nextSibling), i(t) ? null : t;
-                }
-                function u(e) {
-                    var t = null;
-                    return e.previousSibling ? (t = e.previousSibling) : e.parentNode && e.parentNode.previousSibling && (t = e.parentNode.previousSibling), i(t) ? null : t;
-                }
-                function c(e) {
-                    for (var t = 0; (e = e.previousSibling); ) t++;
-                    return t;
-                }
-                function s(e, t) {
-                    var n = e.duplicate();
-                    n.collapse(t);
-                    var o,
-                        r,
-                        i,
-                        a = n.parentElement(),
-                        u = document.createElement("span"),
-                        s = t ? "StartToStart" : "StartToEnd";
-                    do {
-                        a.insertBefore(u, u.previousSibling), n.moveToElementText(u);
-                    } while ((o = n.compareEndPoints(s, e)) > 0 && u.previousSibling);
-                    return (i = u.nextSibling), -1 == o && i ? (n.setEndPoint(t ? "EndToStart" : "EndToEnd", e), (r = { node: i, offset: n.text.length })) : (r = { node: a, offset: c(u) }), u.parentNode.removeChild(u), r;
-                }
-                Object.defineProperty(n, "__esModule", { value: !0 }),
-                    (n.default = function (e) {
-                        var t, n, i, c, l, d;
-                        if (document.body.createTextRange)
-                            try {
-                                (c = document.body.createTextRange()).moveToPoint(e.x, e.y), c.select(), (l = (c = s(c, !0)).node), (d = c.offset);
-                            } catch (e) {
-                                return "";
-                            }
-                        else if (document.caretPositionFromPoint) {
-                            if (!(c = document.caretPositionFromPoint(e.x, e.y))) return "";
-                            (l = c.offsetNode), (d = c.offset);
-                        } else document.caretRangeFromPoint && ((l = (c = document.caretRangeFromPoint(e.x, e.y) || new Range()).startContainer), (d = c.startOffset));
-                        if (!l || l.nodeType !== Node.TEXT_NODE) return "";
-                        var f = l.textContent;
-                        if (d <= 0 || d >= f.length) return "";
-                        if (o(f[d]) || r(f[d])) return "";
-                        for (t = n = i = d; t > 0 && !o(f[t - 1]) && !r(f[t - 1]); ) t--;
-                        for (n = t, t = d; t < f.length - 1 && !o(f[t + 1]) && !r(f[t + 1]); ) t++;
-                        i = t;
-                        var p = f.substring(n, i + 1);
-                        if (i === f.length - 1 || 0 === n) {
-                            var m = a(l),
-                                g = u(l);
-                            if (i == f.length - 1 && m) {
-                                var v = m.textContent || "";
-                                for (t = 0; t < v.length && !o(v[t]) && !r(v[t]); ) p += v[t++];
-                            } else if (0 === n && g) {
-                                var y = g.textContent || "";
-                                for (t = y.length - 1; t >= 0 && !o(y[t]) && !r(y[t]); ) p = y[t--] + p;
-                            }
-                        }
-                        return p;
-                    });
-            },
-            {},
-        ],
-        2: [
-            function (e, t, n) {
-                "use strict";
-                function o(e, t) {
-                    if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
-                }
-                var r = (function () {
-                    function e(e, t) {
-                        for (var n = 0; n < t.length; n++) {
-                            var o = t[n];
-                            (o.enumerable = o.enumerable || !1), (o.configurable = !0), "value" in o && (o.writable = !0), Object.defineProperty(e, o.key, o);
-                        }
-                    }
-                    return function (t, n, o) {
-                        return n && e(t.prototype, n), o && e(t, o), t;
-                    };
-                })();
-                Object.defineProperty(n, "__esModule", { value: !0 });
-                var i,
-                    a = e("./detect"),
-                    u = e("./optionStorage"),
-                    c = e("./utils");
-                !(function (e) {
-                    function t(e) {
-                        var t = document.getElementById(l);
-                        return !!t && String(t.dataset.word).trim() === String(e).trim();
-                    }
-                    function n() {
-                        var e = document.getElementById(l);
-                        e && e.remove();
-                    }
-                    function i(e, t, n) {
-                        f && s(f),
-                            (f = setTimeout(function () {
-                                (f = void 0), new d(t, n);
-                            }, e));
-                    }
-                    function s(e) {
-                        e && clearTimeout(e);
-                    }
-                    var l = "tooltip",
-                        d = (function () {
-                            function e(t, n) {
-                                var r = this;
-                                o(this, e),
-                                    (this.id = l),
-                                    (this.word = t),
-                                    (this.event = n),
-                                    Promise.all([this.translate(), u.getOptions()])
-                                        .then(function (e) {
-                                            r.renderTooltip(e[0], e[1]);
-                                        })
-                                        .catch(function (e) {});
-                            }
-                            return (
-                                r(e, [
-                                    {
-                                        key: "getPageCoordinateOfMouseEvent",
-                                        value: function (e) {
-                                            return (
-                                                e || (e = window.event),
-                                                e.pageX && e.pageY
-                                                    ? { x: e.pageX, y: e.pageY }
-                                                    : e.clientX && e.clientY
-                                                    ? {
-                                                          x: e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft),
-                                                          y: e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop),
-                                                      }
-                                                    : { x: 0, y: 0 }
-                                            );
-                                        },
-                                    },
-                                    {
-                                        key: "correctCoordinateOfTooltip",
-                                        value: function (e, t, n) {
-                                            var o = window.pageXOffset,
-                                                r = window.pageYOffset,
-                                                i = document.documentElement.clientWidth,
-                                                a = document.documentElement.clientHeight,
-                                                u = e.offsetWidth,
-                                                c = e.offsetHeight,
-                                                s = t.x,
-                                                l = "down" == n.tooltipYPosition ? t.y + n.tooltipYOffset : t.y - n.tooltipYOffset - c,
-                                                d = r + a;
-                                            l + c > d && (l = d - c - 5), l < r && (l = r);
-                                            var f = o + i;
-                                            return s + u > f && (s = f - u - 5), s < o && (s = o), { x: s, y: l };
-                                        },
-                                    },
-                                    {
-                                        key: "renderTooltip",
-                                        value: function (e, t) {
-                                            if (!e) return null;
-                                            document.getElementById(this.id) && n();
-                                            var o = document.createElement("div");
-                                            o.id = this.id;
-                                            var r = "-webkit-gradient(linear, left top, left bottom, from(" + t.backgroundGradColorTop + "), to(" + t.backgroundGradColorBottom + "))";
-                                            o.style.setProperty("background", r),
-                                                o.style.setProperty("display", "block"),
-                                                o.style.setProperty("padding", "2px 4px"),
-                                                o.style.setProperty("position", "absolute"),
-                                                o.style.setProperty("z-index", "2147483647", "important"),
-                                                o.style.setProperty("font-size", String(t.fontSize) + "pt"),
-                                                o.style.setProperty("font-weight", t.fontWeight),
-                                                o.style.setProperty("color", t.textColor),
-                                                o.style.setProperty("-webkit-border-radius", ".2em"),
-                                                o.style.setProperty("-webkit-box-shadow", "2px 2px 5px rgba(0,0,0,.4)"),
-                                                (o.dataset.word = String(e.word)),
-                                                (o.textContent = String(e.word + ": " + e.mean.join(", "))),
-                                                document.getElementsByTagName("body")[0].appendChild(o);
-                                            var i = this.correctCoordinateOfTooltip(o, this.getPageCoordinateOfMouseEvent(this.event), t);
-                                            o.style.setProperty("left", String(i.x) + "px", "important"), o.style.setProperty("top", String(i.y) + "px", "important");
-                                        },
-                                    },
-                                    {
-                                        key: "translate",
-                                        value: function () {
-                                            var e = { query: this.word };
-                                            return new Promise(function (t, n) {
-                                                chrome.runtime.sendMessage(e, function (e) {
-                                                    t(e);
-                                                });
-                                            });
-                                        },
-                                    },
-                                ]),
-                                e
-                            );
-                        })(),
-                        f = void 0;
-                    c.domReady().then(function () {
-                        document.onmousemove = function (e) {
-                            u.getOptions(["active", "delayTime"]).then(function (o) {
-                                if (o.active) {
-                                    var r = a.default({ x: e.clientX, y: e.clientY });
-                                    "" != r ? t(r) || i(o.delayTime, r, e) : (s(f), n());
-                                }
-                            });
-                        };
-                    });
-                })(i || (i = {}));
-            },
-            { "./detect": 1, "./optionStorage": 3, "./utils": 4 },
-        ],
-        3: [
-            function (e, t, n) {
-                "use strict";
-                Object.defineProperty(n, "__esModule", { value: !0 }),
-                    (n.defaultOptions = {
-                        active: !0,
-                        tooltipYOffset: 30,
-                        tooltipYPosition: "down",
-                        fontSize: 9,
-                        fontWeight: "normal",
-                        textColor: "rgb(241, 241, 241)",
-                        backgroundGradColorTop: "rgb(105, 105, 105)",
-                        backgroundGradColorBottom: "rgb(84, 84, 84)",
-                        borderColor: "#707070",
-                        delayTime: 200,
-                    }),
-                    (n.setOptions = function (e) {
-                        return new Promise(function (t, n) {
-                            chrome.storage.sync.set(e, t);
-                        });
-                    }),
-                    (n.getOptions = function (e) {
-                        return new Promise(function (t, n) {
-                            chrome.storage.sync.get(e, t);
-                        });
-                    });
-            },
-            {},
-        ],
-        4: [
-            function (e, t, n) {
-                "use strict";
-                Object.defineProperty(n, "__esModule", { value: !0 }),
-                    (n.domReady = function () {
-                        return new Promise(function (e, t) {
-                            "interactive" === document.readyState || "complete" === document.readyState ? e() : document.addEventListener("DOMContentLoaded", e);
-                        });
-                    });
-                var o = { 16: "images/nonactive16.png", 32: "images/nonactive32.png", 48: "images/nonactive48.png", 64: "images/nonactive64.png", 96: "images/nonactive96.png", 128: "images/nonactive128.png" },
-                    r = { 16: "images/active16.png", 32: "images/active32.png", 48: "images/active48.png", 64: "images/active64.png", 96: "images/active96.png", 128: "images/active128.png" };
-                n.changeIcon = function (e) {
-                    var t = e ? r : o;
-                    chrome.browserAction.setIcon({ path: t });
-                };
-            },
-            {},
-        ],
+    return cache[moduleName].exports;
+  }
+
+  for (var i = typeof window.require === "function" && window.require, a = 0; a < entryPoints.length; a++) {
+    require(entryPoints[a]);
+  }
+
+  return require;
+})({
+  // Module 1: Word detection
+  1: [
+    function (require, module, exports) {
+      "use strict";
+
+      /**
+       * Checks if a character is a whitespace character
+       * @param {string} char - The character to check
+       * @return {boolean} True if the character is whitespace
+       */
+      function isWhitespace(char) {
+        return /[ \f\n\r\t\v\u00A0\u2028\u2029]/.test(char);
+      }
+
+      /**
+       * Checks if a character is a special character
+       * @param {string} char - The character to check
+       * @return {boolean} True if the character is a special character
+       */
+      function isSpecialCharacter(char) {
+        return /[\^\$\!\@\#\%\&\*\-\_\=\+\,\.\:\/\;\"\'\(\)\[\]\{\<\>}]/.test(char);
+      }
+
+      /**
+       * Checks if an element is a block-level element
+       * @param {HTMLElement} element - The element to check
+       * @return {boolean} True if the element is a block-level element
+       */
+      function isBlockElement(element) {
+        return !element || /^(BR|DIV|P|PRE|TD|TR|TABLE)$/i.test(element.nodeName);
+      }
+
+      /**
+       * Gets the next sibling of an element, considering parent relationships
+       * @param {HTMLElement} element - The element to find the next sibling for
+       * @return {HTMLElement|null} The next sibling or null
+       */
+      function getNextSibling(element) {
+        var nextSibling = null;
+
+        if (element.nextSibling) {
+          nextSibling = element.nextSibling;
+        } else if (element.parentNode && element.parentNode.nextSibling) {
+          nextSibling = element.parentNode.nextSibling;
+        }
+
+        return isBlockElement(nextSibling) ? null : nextSibling;
+      }
+
+      /**
+       * Gets the previous sibling of an element, considering parent relationships
+       * @param {HTMLElement} element - The element to find the previous sibling for
+       * @return {HTMLElement|null} The previous sibling or null
+       */
+      function getPreviousSibling(element) {
+        var previousSibling = null;
+
+        if (element.previousSibling) {
+          previousSibling = element.previousSibling;
+        } else if (element.parentNode && element.parentNode.previousSibling) {
+          previousSibling = element.parentNode.previousSibling;
+        }
+
+        return isBlockElement(previousSibling) ? null : previousSibling;
+      }
+
+      /**
+       * Gets the index of an element among its siblings
+       * @param {HTMLElement} element - The element to find the index for
+       * @return {number} The index of the element
+       */
+      function getElementIndex(element) {
+        var index = 0;
+        while ((element = element.previousSibling)) {
+          index++;
+        }
+        return index;
+      }
+
+      /**
+       * Gets the position information from a text range
+       * @param {TextRange} textRange - The text range
+       * @param {boolean} isStart - Whether to get the start position
+       * @return {Object} Object containing node and offset information
+       */
+      function getTextRangePosition(textRange, isStart) {
+        var duplicatedRange = textRange.duplicate();
+        duplicatedRange.collapse(isStart);
+
+        var compareResult, result, placeholder;
+        var container = duplicatedRange.parentElement();
+        var span = document.createElement("span");
+        var compareMethod = isStart ? "StartToStart" : "StartToEnd";
+
+        do {
+          container.insertBefore(span, span.previousSibling);
+          duplicatedRange.moveToElementText(span);
+        } while ((compareResult = duplicatedRange.compareEndPoints(compareMethod, textRange)) > 0 && span.previousSibling);
+
+        if (compareResult === -1 && span.nextSibling) {
+          duplicatedRange.setEndPoint(isStart ? "EndToStart" : "EndToEnd", textRange);
+          result = {
+            node: span.nextSibling,
+            offset: duplicatedRange.text.length
+          };
+        } else {
+          result = {
+            node: container,
+            offset: getElementIndex(span)
+          };
+        }
+
+        span.parentNode.removeChild(span);
+        return result;
+      }
+
+      /**
+       * Extracts a word from a click position
+       * @param {Object} position - The x,y coordinates of the mouse click
+       * @return {string} The extracted word or empty string if no word is found
+       */
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.default = function (position) {
+        var wordStart, wordEnd, wordPosition, caretPosition, node, offset;
+
+        // Handle different browser implementations for getting text node at point
+        if (document.body.createTextRange) {
+          try {
+            caretPosition = document.body.createTextRange();
+            caretPosition.moveToPoint(position.x, position.y);
+            caretPosition.select();
+
+            var rangeInfo = getTextRangePosition(caretPosition, true);
+            node = rangeInfo.node;
+            offset = rangeInfo.offset;
+          } catch (e) {
+            return "";
+          }
+        } else if (document.caretPositionFromPoint) {
+          caretPosition = document.caretPositionFromPoint(position.x, position.y);
+          if (!caretPosition) {
+            return "";
+          }
+          node = caretPosition.offsetNode;
+          offset = caretPosition.offset;
+        } else if (document.caretRangeFromPoint) {
+          caretPosition = document.caretRangeFromPoint(position.x, position.y) || new Range();
+          node = caretPosition.startContainer;
+          offset = caretPosition.startOffset;
+        }
+
+        // Ensure we have a valid text node
+        if (!node || node.nodeType !== Node.TEXT_NODE) {
+          return "";
+        }
+
+        var text = node.textContent;
+
+        // Check if the offset is valid
+        if (offset <= 0 || offset >= text.length) {
+          return "";
+        }
+
+        // Check if the character at offset is valid for word detection
+        if (isWhitespace(text[offset]) || isSpecialCharacter(text[offset])) {
+          return "";
+        }
+
+        // Find word boundaries
+        wordStart = wordEnd = wordPosition = offset;
+
+        // Find word start
+        while (wordStart > 0 && !isWhitespace(text[wordStart - 1]) && !isSpecialCharacter(text[wordStart - 1])) {
+          wordStart--;
+        }
+
+        // Store the start of the word
+        wordPosition = wordStart;
+
+        // Find word end
+        while (wordEnd < text.length - 1 && !isWhitespace(text[wordEnd + 1]) && !isSpecialCharacter(text[wordEnd + 1])) {
+          wordEnd++;
+        }
+
+        // Extract the word
+        var word = text.substring(wordPosition, wordEnd + 1);
+
+        // Handle words at text node boundaries
+        if (wordEnd === text.length - 1 || wordStart === 0) {
+          var nextSibling = getNextSibling(node);
+          var prevSibling = getPreviousSibling(node);
+
+          // Check next node for continuation of the word
+          if (wordEnd == text.length - 1 && nextSibling) {
+            var nextText = nextSibling.textContent || "";
+            for (wordEnd = 0; wordEnd < nextText.length && !isWhitespace(nextText[wordEnd]) && !isSpecialCharacter(nextText[wordEnd]); wordEnd++) {
+              word += nextText[wordEnd];
+            }
+          }
+          // Check previous node for start of the word
+          else if (wordStart === 0 && prevSibling) {
+            var prevText = prevSibling.textContent || "";
+            for (wordStart = prevText.length - 1; wordStart >= 0 && !isWhitespace(prevText[wordStart]) && !isSpecialCharacter(prevText[wordStart]); wordStart--) {
+              word = prevText[wordStart] + word;
+            }
+          }
+        }
+
+        return word;
+      };
     },
     {},
-    [2]
+  ],
+
+  // Module 2: Main tooltip functionality
+  2: [
+    function (require, module, exports) {
+      "use strict";
+
+      function _classCallCheck(instance, constructor) {
+        if (!(instance instanceof constructor)) {
+          throw new TypeError("Cannot call a class as a function");
+        }
+      }
+
+      var _createClass = (function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) {
+              descriptor.writable = true;
+            }
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) {
+            defineProperties(Constructor.prototype, protoProps);
+          }
+          if (staticProps) {
+            defineProperties(Constructor, staticProps);
+          }
+          return Constructor;
+        };
+      })();
+
+      Object.defineProperty(exports, "__esModule", { value: true });
+
+      var _detect = require("./detect");
+      var _optionStorage = require("./optionStorage");
+      var _utils = require("./utils");
+
+      // Main module namespace
+      (function (TooltipDictionary) {
+        var TOOLTIP_ID = "tooltip";
+        var activeTimeout = undefined;
+
+        /**
+         * Checks if a tooltip for a specific word is already displayed
+         * @param {string} word - The word to check
+         * @return {boolean} True if a tooltip for this word exists
+         */
+        function isTooltipDisplayed(word) {
+          var tooltip = document.getElementById(TOOLTIP_ID);
+          return !!tooltip && String(tooltip.dataset.word).trim() === String(word).trim();
+        }
+
+        /**
+         * Removes the currently displayed tooltip
+         */
+        function removeTooltip() {
+          var tooltip = document.getElementById(TOOLTIP_ID);
+          if (tooltip) {
+            tooltip.remove();
+          }
+        }
+
+        /**
+         * Sets a timeout to display the tooltip
+         * @param {number} delay - The delay in milliseconds
+         * @param {string} word - The word to display
+         * @param {Event} event - The mouse event
+         */
+        function setTooltipTimeout(delay, word, event) {
+          if (activeTimeout) {
+            clearTooltipTimeout(activeTimeout);
+          }
+
+          activeTimeout = setTimeout(function () {
+            activeTimeout = undefined;
+            new TooltipHandler(word, event);
+          }, delay);
+        }
+
+        /**
+         * Clears a tooltip timeout
+         * @param {number} timeout - The timeout to clear
+         */
+        function clearTooltipTimeout(timeout) {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+        }
+
+        /**
+         * Handles the creation and display of tooltips
+         */
+        var TooltipHandler = (function () {
+          /**
+           * Creates a new tooltip handler
+           * @param {string} word - The word to look up
+           * @param {Event} event - The mouse event
+           */
+          function TooltipHandler(word, event) {
+            var _this = this;
+
+            _classCallCheck(this, TooltipHandler);
+
+            this.id = TOOLTIP_ID;
+            this.word = word;
+            this.event = event;
+
+            Promise.all([this.translate(), _optionStorage.getOptions()])
+              .then(function (results) {
+                _this.renderTooltip(results[0], results[1]);
+              })
+              .catch(function (error) {
+                // Handle errors silently
+              });
+          }
+
+          _createClass(TooltipHandler, [
+            {
+              key: "getPageCoordinateOfMouseEvent",
+
+              /**
+               * Gets the page coordinates from a mouse event
+               * @param {Event} event - The mouse event
+               * @return {Object} Object with x and y coordinates
+               */
+              value: function getPageCoordinateOfMouseEvent(event) {
+                if (!event) {
+                  event = window.event;
+                }
+
+                // Use pageX/Y if available
+                if (event.pageX && event.pageY) {
+                  return { x: event.pageX, y: event.pageY };
+                }
+
+                // Otherwise calculate from clientX/Y and scroll position
+                if (event.clientX && event.clientY) {
+                  return {
+                    x: event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft),
+                    y: event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)
+                  };
+                }
+
+                return { x: 0, y: 0 };
+              }
+            },
+            {
+              key: "correctCoordinateOfTooltip",
+
+              /**
+               * Adjusts the coordinates of the tooltip to ensure it's visible
+               * @param {HTMLElement} tooltipElement - The tooltip element
+               * @param {Object} mousePosition - The mouse position {x, y}
+               * @param {Object} options - The tooltip options
+               * @return {Object} Corrected position {x, y}
+               */
+              value: function correctCoordinateOfTooltip(tooltipElement, mousePosition, options) {
+                var windowScrollX = window.pageXOffset;
+                var windowScrollY = window.pageYOffset;
+                var viewportWidth = document.documentElement.clientWidth;
+                var viewportHeight = document.documentElement.clientHeight;
+                var tooltipWidth = tooltipElement.offsetWidth;
+                var tooltipHeight = tooltipElement.offsetHeight;
+
+                var posX = mousePosition.x;
+                var posY = options.tooltipYPosition == "down"
+                  ? mousePosition.y + options.tooltipYOffset
+                  : mousePosition.y - options.tooltipYOffset - tooltipHeight;
+
+                // Adjust Y position to be inside viewport
+                var maxY = windowScrollY + viewportHeight;
+                if (posY + tooltipHeight > maxY) {
+                  posY = maxY - tooltipHeight - 5;
+                }
+                if (posY < windowScrollY) {
+                  posY = windowScrollY;
+                }
+
+                // Adjust X position to be inside viewport
+                var maxX = windowScrollX + viewportWidth;
+                if (posX + tooltipWidth > maxX) {
+                  posX = maxX - tooltipWidth - 5;
+                }
+                if (posX < windowScrollX) {
+                  posX = windowScrollX;
+                }
+
+                return { x: posX, y: posY };
+              }
+            },
+            {
+              key: "renderTooltip",
+
+              /**
+               * Renders the tooltip with translation results
+               * @param {Object} translation - The translation result
+               * @param {Object} options - The tooltip options
+               */
+              value: function renderTooltip(translation, options) {
+                var tooltipElement = document.createElement("div");
+                tooltipElement.id = this.id;
+
+                var gradient = "-webkit-gradient(linear, left top, left bottom, from(" +
+                  options.backgroundGradColorTop + "), to(" +
+                  options.backgroundGradColorBottom + "))";
+
+                // Set tooltip styles
+                tooltipElement.style.setProperty("background", gradient);
+                tooltipElement.style.setProperty("display", "block");
+                tooltipElement.style.setProperty("padding", "2px 4px");
+                tooltipElement.style.setProperty("position", "absolute");
+                tooltipElement.style.setProperty("z-index", "2147483647", "important");
+                tooltipElement.style.setProperty("font-size", String(options.fontSize) + "pt");
+                tooltipElement.style.setProperty("font-weight", options.fontWeight);
+                tooltipElement.style.setProperty("color", options.textColor);
+                tooltipElement.style.setProperty("-webkit-border-radius", ".2em");
+                tooltipElement.style.setProperty("-webkit-box-shadow", "2px 2px 5px rgba(0,0,0,.4)");
+
+                // Set tooltip content
+                tooltipElement.dataset.word = String(translation.word);
+                tooltipElement.textContent = String(translation.word + ": " + translation.mean.join(", "));
+
+                // Add tooltip to the DOM
+                document.getElementsByTagName("body")[0].appendChild(tooltipElement);
+
+                // Position the tooltip
+                var position = this.correctCoordinateOfTooltip(
+                  tooltipElement,
+                  this.getPageCoordinateOfMouseEvent(this.event),
+                  options
+                );
+
+                tooltipElement.style.setProperty("left", String(position.x) + "px", "important");
+                tooltipElement.style.setProperty("top", String(position.y) + "px", "important");
+              }
+            },
+            {
+              key: "translate",
+
+              /**
+               * Sends a message to the background script to translate the word
+               * @return {Promise} Promise that resolves with translation
+               */
+              value: function translate() {
+                var message = { query: this.word };
+
+                return new Promise(function (resolve, reject) {
+                  chrome.runtime.sendMessage(message, function (response) {
+                    resolve(response);
+                  });
+                });
+              }
+            }
+          ]);
+
+          return TooltipHandler;
+        })();
+
+        // Initialize the extension when DOM is ready
+        _utils.domReady().then(function () {
+          document.onmousemove = function (event) {
+            _optionStorage.getOptions(["active", "delayTime"]).then(function (options) {
+              if (options.active) {
+                var word = _detect.default({ x: event.clientX, y: event.clientY });
+
+                if (word != "") {
+                  if (!isTooltipDisplayed(word)) {
+                    setTooltipTimeout(options.delayTime, word, event);
+                  }
+                } else {
+                  clearTooltipTimeout(activeTimeout);
+                  removeTooltip();
+                }
+              }
+            });
+          };
+        });
+      })(_detect || (_detect = {}));
+    },
+    { "./detect": 1, "./optionStorage": 3, "./utils": 4 }
+  ],
+
+  // Module 3: Options storage
+  3: [
+    function (require, module, exports) {
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", { value: true });
+
+      /**
+       * Default extension options
+       */
+      exports.defaultOptions = {
+        active: true,
+        tooltipYOffset: 30,
+        tooltipYPosition: "down",
+        fontSize: 9,
+        fontWeight: "normal",
+        textColor: "rgb(241, 241, 241)",
+        backgroundGradColorTop: "rgb(105, 105, 105)",
+        backgroundGradColorBottom: "rgb(84, 84, 84)",
+        borderColor: "#707070",
+        delayTime: 200
+      };
+
+      /**
+       * Saves options to Chrome storage
+       * @param {Object} options - Options to save
+       * @return {Promise} Promise that resolves when options are saved
+       */
+      exports.setOptions = function (options) {
+        return new Promise(function (resolve, reject) {
+          chrome.storage.sync.set(options, resolve);
+        });
+      };
+
+      /**
+       * Gets options from Chrome storage
+       * @param {Array|undefined} keys - Optional array of option keys to retrieve
+       * @return {Promise} Promise that resolves with the options
+       */
+      exports.getOptions = function (keys) {
+        return new Promise(function (resolve, reject) {
+          chrome.storage.sync.get(keys, resolve);
+        });
+      };
+    },
+    {}
+  ],
+
+  // Module 4: Utility functions
+  4: [
+    function (require, module, exports) {
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", { value: true });
+
+      /**
+       * Returns a promise that resolves when the DOM is ready
+       * @return {Promise} Promise that resolves when the DOM is ready
+       */
+      exports.domReady = function () {
+        return new Promise(function (resolve, reject) {
+          if (document.readyState === "interactive" || document.readyState === "complete") {
+            resolve();
+          } else {
+            document.addEventListener("DOMContentLoaded", resolve);
+          }
+        });
+      };
+
+      // Icon paths for inactive state
+      var inactiveIcons = {
+        16: "images/nonactive16.png",
+        32: "images/nonactive32.png",
+        48: "images/nonactive48.png",
+        64: "images/nonactive64.png",
+        96: "images/nonactive96.png",
+        128: "images/nonactive128.png"
+      };
+
+      // Icon paths for active state
+      var activeIcons = {
+        16: "images/active16.png",
+        32: "images/active32.png",
+        48: "images/active48.png",
+        64: "images/active64.png",
+        96: "images/active96.png",
+        128: "images/active128.png"
+      };
+
+      /**
+       * Changes the extension icon based on its active state
+       * @param {boolean} isActive - Whether the extension is active
+       */
+      exports.changeIcon = function (isActive) {
+        var iconPaths = isActive ? activeIcons : inactiveIcons;
+        chrome.browserAction.setIcon({ path: iconPaths });
+      };
+    },
+    {}
+  ]
+},
+  {},
+  [2]
 );
