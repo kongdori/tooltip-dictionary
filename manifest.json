@@ -4,7 +4,7 @@
   "name": "Tooltip Dictionary",
   "version": "1.0.1.1",
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "service_worker.js"
   },
   "icons": {
     "16": "images/active16.png",
