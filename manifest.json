@@ -39,8 +39,5 @@
   "permissions": [
     "activeTab",
     "storage"
-  ],
-  "host_permissions": [
-    "http://tooltip.dic.naver.com/tooltip.nhn/"
   ]
 }
