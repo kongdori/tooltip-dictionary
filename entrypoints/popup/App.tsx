@@ -2,10 +2,17 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [active, setActive] = useState(false);
-  const [delayTime, setDelayTime] = useState(300);
-  const [fontSize, setFontSize] = useState(10);
-  const [tooltipPosition, setTooltipPosition] = useState('Down');
+  const defaultSettings = {
+    active: true,
+    delayTime: 300,
+    fontSize: 10,
+    tooltipPosition: 'Down'
+  };
+
+  const [active, setActive] = useState(defaultSettings.active);
+  const [delayTime, setDelayTime] = useState(defaultSettings.delayTime);
+  const [fontSize, setFontSize] = useState(defaultSettings.fontSize);
+  const [tooltipPosition, setTooltipPosition] = useState(defaultSettings.tooltipPosition);
   const [isLoaded, setIsLoaded] = useState(false);
   
   const delayTimeMin = 100;
@@ -13,13 +20,6 @@ function App() {
   const fontSizeMin = 5;
   const fontSizeMax = 15;
   const positionOptions = ['Up', 'Down'];
-
-  const defaultSettings = {
-    active: true,
-    delayTime: 300,
-    fontSize: 10,
-    tooltipPosition: 'Down'
-  };
 
   useEffect(() => {
     browser.storage.sync.get(defaultSettings, (items) => {
