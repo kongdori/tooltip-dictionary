@@ -1,6 +1,6 @@
 import { defineBackground } from 'wxt/sandbox';
 import { browser } from 'wxt/browser';
-import { changeIcon, activeIcons, inactiveIcons } from '../utils/utils';
+import { changeIcon } from '../utils/utils';
 import { getOptions, setOptions, defaultOptions, TooltipOptions } from '../utils/optionStorage';
 
 export default defineBackground(async () => {
@@ -36,18 +36,30 @@ export default defineBackground(async () => {
     if (request && request.query) {
       const url = `https://api.100factories.com/api/v1/dictionary/tooltip?term=${encodeURIComponent(request.query.toLowerCase())}&sourceLocale=en-US&targetLocale=ko-KR`;
       
+      // Add timeout of 3 seconds for the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      
       fetch(url, {
         headers: {
           "Authorization": `Basic ${btoa("tooltip-dictionary:47a542829d42ca0031d3bcae2fa92223005986dc1e24649284e1d6543a41b25e")}`,
           "Content-Type": "application/json",
         },
+        signal: controller.signal
       })
         .then(response => response.json())
         .then(data => {
+          clearTimeout(timeoutId);
           sendResponse(data && data.isTranslatable ? { word: data.root, mean: data.translations } : null);
         })
         .catch(error => {
-          console.error("Error fetching dictionary data:", error);
+          clearTimeout(timeoutId);
+          // Check if the error was caused by the timeout
+          if (error.name === 'AbortError') {
+            console.log('Dictionary API request timed out after 3 seconds');
+          } else {
+            console.error("Error fetching dictionary data:", error);
+          }
           sendResponse(null);
         });
     } else {
