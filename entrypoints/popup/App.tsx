@@ -5,7 +5,7 @@ function App() {
   const [active, setActive] = useState(false);
   const [delayTime, setDelayTime] = useState(300);
   const [fontSize, setFontSize] = useState(10);
-  const [tooltipPosition, setTooltipPosition] = useState('');
+  const [tooltipPosition, setTooltipPosition] = useState('Up');
   
   // Options for selects and sliders
   const delayTimeMin = 100;
@@ -26,87 +26,75 @@ function App() {
 
   // Save settings when they change
   useEffect(() => {
-    if (delayTime && fontSize && tooltipPosition) {
+    if (tooltipPosition) {
       // Would typically save to Chrome storage API
       console.log('Saving settings:', { active, delayTime, fontSize, tooltipPosition });
     }
   }, [active, delayTime, fontSize, tooltipPosition]);
 
   return (
-    <div className="row" id="popup_whole_row">
-      <div className="col s12 m12" id="popup_whole_col">
-        <div className="card blue-grey darken-1">
-          <div className="card-content white-text">
-            <div className="card-title row">
-              <div className="col s6" id="extension_name">Tooltip Dictionary</div>
-              <div className="col s6 switch">
-                <label className="option_value">
-                  <input 
-                    type="checkbox" 
-                    id="active_control"
-                    checked={active}
-                    onChange={(e) => setActive(e.target.checked)}
-                  />
-                  <span className="lever"></span>
-                </label>
-              </div>
+    <div className="popup-container">
+      <div className="popup-card">
+        <div className="popup-header">
+          <h1 className="popup-title">Tooltip Dictionary</h1>
+          <div className="toggle-switch">
+            <label className="switch">
+              <input 
+                type="checkbox" 
+                checked={active}
+                onChange={(e) => setActive(e.target.checked)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div className="popup-content">
+          <div className="setting-group">
+            <div className="setting-row">
+              <label htmlFor="delayTime_control">Delay Time</label>
+              <span className="value-display">{delayTime}ms</span>
             </div>
-            <div className="option_row"> 
-              <div className="col s6 option_name">Delay Time</div>
-              <div className="input-field col s6">
-                <div className="option_value">
-                  <div className="range-field">
-                    <input 
-                      type="range" 
-                      id="delayTime_control" 
-                      min={delayTimeMin} 
-                      max={delayTimeMax} 
-                      step="100"
-                      value={delayTime}
-                      onChange={(e) => setDelayTime(parseInt(e.target.value))}
-                    />
-                    <span className="value-display">{delayTime}ms</span>
-                  </div>
-                </div>
-              </div>
+            <input 
+              type="range" 
+              id="delayTime_control" 
+              min={delayTimeMin} 
+              max={delayTimeMax} 
+              step="100"
+              value={delayTime}
+              onChange={(e) => setDelayTime(parseInt(e.target.value))}
+              className="range-slider"
+            />
+          </div>
+          
+          <div className="setting-group">
+            <div className="setting-row">
+              <label htmlFor="fontSize_control">Font Size</label>
+              <span className="value-display">{fontSize}</span>
             </div>
-            <div className="option_row"> 
-              <div className="col s6 option_name">Font Size</div>
-              <div className="input-field col s6">
-                <div className="option_value">
-                  <div className="range-field">
-                    <input 
-                      type="range" 
-                      id="fontSize_control" 
-                      min={fontSizeMin} 
-                      max={fontSizeMax} 
-                      step="1"
-                      value={fontSize}
-                      onChange={(e) => setFontSize(parseInt(e.target.value))}
-                    />
-                    <span className="value-display">{fontSize}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="option_row"> 
-              <div className="col s6 option_name">Tooltip Position</div>
-              <div className="input-field col s6">
-                <div className="option_value">
-                  <div>
-                    <select 
-                      id="tooltipYPosition_control"
-                      value={tooltipPosition}
-                      onChange={(e) => setTooltipPosition(e.target.value)}
-                    >
-                      {positionOptions.map((option) => (
-                        <option key={option} value={option}>{option}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <input 
+              type="range" 
+              id="fontSize_control" 
+              min={fontSizeMin} 
+              max={fontSizeMax} 
+              step="1"
+              value={fontSize}
+              onChange={(e) => setFontSize(parseInt(e.target.value))}
+              className="range-slider"
+            />
+          </div>
+          
+          <div className="setting-group">
+            <label htmlFor="tooltipPosition_control">Tooltip Position</label>
+            <select 
+              id="tooltipPosition_control"
+              value={tooltipPosition}
+              onChange={(e) => setTooltipPosition(e.target.value)}
+              className="select-input"
+            >
+              {positionOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
