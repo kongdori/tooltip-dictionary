@@ -1,7 +1,7 @@
 # tooltip-dictionary
 
-![스크린샷 툴팁](images/screenshot_tooltip.png?)
-![스크린샷 팝업](images/screenshot_popup.png?)
+![스크린샷 툴팁](screenshot_tooltip.png)
+![스크린샷 팝업](screenshot_popup.png)
 
 ## Goals
 * Chrome 확장 Manifest V3 지원 추가
