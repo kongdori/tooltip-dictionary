@@ -1,39 +1,56 @@
 import { useState, useEffect } from 'react';
+import { browser } from 'wxt/browser';
+import { getOptions, setOptions, TooltipOptions } from '../../utils/optionStorage';
 import './App.css';
 
 function App() {
-  const defaultSettings = {
-    active: true,
-    delayTime: 200,
-    fontSize: 10,
-    tooltipPosition: 'Down'
-  };
-
-  const [active, setActive] = useState(defaultSettings.active);
-  const [delayTime, setDelayTime] = useState(defaultSettings.delayTime);
-  const [fontSize, setFontSize] = useState(defaultSettings.fontSize);
-  const [tooltipPosition, setTooltipPosition] = useState(defaultSettings.tooltipPosition);
+  const [active, setActive] = useState(true);
+  const [delayTime, setDelayTime] = useState(200);
+  const [fontSize, setFontSize] = useState(10);
+  const [tooltipPosition, setTooltipPosition] = useState('down');
   const [isLoaded, setIsLoaded] = useState(false);
   
   const delayTimeMin = 100;
   const delayTimeMax = 1000;
   const fontSizeMin = 5;
   const fontSizeMax = 15;
-  const positionOptions = ['Down', 'Up'];
+  const positionOptions = ['down', 'up'];
 
+  // Load settings on initial mount
   useEffect(() => {
-    browser.storage.sync.get(defaultSettings, (items) => {
-      setActive(items.active);
-      setDelayTime(items.delayTime);
-      setFontSize(items.fontSize);
-      setTooltipPosition(items.tooltipPosition);
-      setIsLoaded(true);
-    });
+    const loadOptions = async () => {
+      try {
+        const options = await getOptions(['active', 'delayTime', 'fontSize', 'tooltipYPosition']);
+        setActive(options.active);
+        setDelayTime(options.delayTime);
+        setFontSize(options.fontSize);
+        setTooltipPosition(options.tooltipYPosition);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error('Error loading options:', error);
+      }
+    };
+    
+    loadOptions();
   }, []);
 
+  // Save settings when they change
   useEffect(() => {
     if (isLoaded) {
-      browser.storage.sync.set({ active, delayTime, fontSize, tooltipPosition });
+      const saveOptions = async () => {
+        try {
+          await setOptions({
+            active,
+            delayTime,
+            fontSize,
+            tooltipYPosition: tooltipPosition
+          });
+        } catch (error) {
+          console.error('Error saving options:', error);
+        }
+      };
+      
+      saveOptions();
     }
   }, [active, delayTime, fontSize, tooltipPosition, isLoaded]);
 
@@ -97,7 +114,7 @@ function App() {
               className="select-input"
             >
               {positionOptions.map((option) => (
-                <option key={option} value={option}>{option}</option>
+                <option key={option} value={option}>{option.charAt(0).toUpperCase() + option.slice(1)}</option>
               ))}
             </select>
           </div>
