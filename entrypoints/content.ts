@@ -111,10 +111,12 @@ export default defineContentScript({
         const tooltipWidth = tooltipElement.offsetWidth;
         const tooltipHeight = tooltipElement.offsetHeight;
 
+        const tooltipYOffset = 20;
+
         let posX = mousePosition.x;
         let posY = options.tooltipYPosition === "down"
-          ? mousePosition.y + options.tooltipYOffset
-          : mousePosition.y - options.tooltipYOffset - tooltipHeight;
+          ? mousePosition.y + tooltipYOffset
+          : mousePosition.y - tooltipYOffset - tooltipHeight;
 
         // Adjust Y position to be inside viewport
         const maxY = windowScrollY + viewportHeight;
@@ -145,17 +147,17 @@ export default defineContentScript({
         tooltipElement.id = this.id;
 
         // Set light mode design
-        tooltipElement.style.setProperty("background", `linear-gradient(to bottom, ${options.backgroundGradColorTop}, ${options.backgroundGradColorBottom})`);
+        tooltipElement.style.setProperty("background", `linear-gradient(to bottom, #ffffff, #f9fafc)`);
         tooltipElement.style.setProperty("display", "block");
         tooltipElement.style.setProperty("padding", "2px 6px");
         tooltipElement.style.setProperty("position", "absolute");
         tooltipElement.style.setProperty("z-index", "2147483647");
         tooltipElement.style.setProperty("font-size", `${options.fontSize}pt`);
-        tooltipElement.style.setProperty("font-weight", options.fontWeight);
-        tooltipElement.style.setProperty("color", options.textColor);
+        tooltipElement.style.setProperty("font-weight", "normal");
+        tooltipElement.style.setProperty("color", "#333333");
         tooltipElement.style.setProperty("border-radius", "4px");
         tooltipElement.style.setProperty("box-shadow", "0 1px 4px rgba(0,0,0,0.1)");
-        tooltipElement.style.setProperty("border", `1px solid ${options.borderColor}`);
+        tooltipElement.style.setProperty("border", `1px solid #a1aabb`);
         tooltipElement.style.setProperty("font-family", "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif");
 
         // Set tooltip content

@@ -10,15 +10,9 @@ import { browser } from 'wxt/browser';
  */
 export interface TooltipOptions {
   active: boolean;
-  tooltipYOffset: number;
-  tooltipYPosition: string;
-  fontSize: number;
-  fontWeight: string;
-  textColor: string;
-  backgroundGradColorTop: string;
-  backgroundGradColorBottom: string;
-  borderColor: string;
   delayTime: number;
+  fontSize: number;
+  tooltipYPosition: "up" | "down";
 }
 
 /**
@@ -26,15 +20,9 @@ export interface TooltipOptions {
  */
 export const defaultOptions: TooltipOptions = {
   active: true,
-  tooltipYOffset: 15,
-  tooltipYPosition: "down",
+  delayTime: 200,
   fontSize: 9,
-  fontWeight: "normal",
-  textColor: "#333333",
-  backgroundGradColorTop: "#ffffff",
-  backgroundGradColorBottom: "#f9fafc",
-  borderColor: "#a1aabb",
-  delayTime: 200
+  tooltipYPosition: "down",
 };
 
 /**
