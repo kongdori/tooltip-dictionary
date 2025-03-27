@@ -45,6 +45,8 @@ function App() {
             fontSize,
             tooltipYPosition: tooltipPosition
           });
+
+          changeIcon(active);
         } catch (error) {
           console.error('Error saving options:', error);
         }
