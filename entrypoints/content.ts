@@ -144,7 +144,7 @@ export default defineContentScript({
         const tooltipElement = document.createElement("div");
         tooltipElement.id = this.id;
 
-        // Set Toss-inspired light mode design
+        // Set light mode design
         tooltipElement.style.setProperty("background", `linear-gradient(to bottom, ${options.backgroundGradColorTop}, ${options.backgroundGradColorBottom})`);
         tooltipElement.style.setProperty("display", "block");
         tooltipElement.style.setProperty("padding", "2px 6px");

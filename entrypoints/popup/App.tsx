@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { browser } from 'wxt/browser';
 import { getOptions, setOptions, TooltipOptions } from '../../utils/optionStorage';
 import './App.css';
 
