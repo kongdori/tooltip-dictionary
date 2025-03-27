@@ -4,11 +4,15 @@ import { domReady } from '../utils/utils';
 import { getOptions } from '../utils/optionStorage';
 import detectWord from '../utils/detect';
 
+// Used to track the latest tooltip request
+let currentRequestId = 0;
+
 export default defineContentScript({
   matches: ['*://*/*'],
   main() {
     const TOOLTIP_ID = "tooltip-dictionary-popup";
     let activeTimeout: number | undefined = undefined;
+    let activeRequestId = 0;
 
     /**
      * Checks if a tooltip for a specific word is already displayed
@@ -35,10 +39,17 @@ export default defineContentScript({
       if (activeTimeout) {
         clearTimeout(activeTimeout);
       }
+      
+      // Increment request ID for each new request
+      activeRequestId = ++currentRequestId;
+      const requestId = activeRequestId;
 
       activeTimeout = window.setTimeout(() => {
         activeTimeout = undefined;
-        new TooltipHandler(word, event);
+        // Only create a tooltip if this is still the active request
+        if (requestId === currentRequestId) {
+          new TooltipHandler(word, event, requestId);
+        }
       }, delay);
     }
 
@@ -57,18 +68,23 @@ export default defineContentScript({
       id: string;
       word: string;
       event: MouseEvent;
+      requestId: number;
 
       /**
        * Creates a new tooltip handler
        */
-      constructor(word: string, event: MouseEvent) {
+      constructor(word: string, event: MouseEvent, requestId: number) {
         this.id = TOOLTIP_ID;
         this.word = word;
         this.event = event;
+        this.requestId = requestId;
 
         Promise.all([this.translate(), getOptions()])
           .then(([translation, options]) => {
-            this.renderTooltip(translation, options);
+            // Only render if this is still the active request
+            if (this.requestId === currentRequestId) {
+              this.renderTooltip(translation, options);
+            }
           })
           .catch((error) => {
             // Handle errors silently
@@ -143,6 +159,14 @@ export default defineContentScript({
        * Renders the tooltip with translation results
        */
       renderTooltip(translation: TranslationResult, options: any): void {
+        // Double-check this is still the active request before rendering
+        if (this.requestId !== currentRequestId) {
+          return;
+        }
+        
+        // Remove any existing tooltip first
+        removeTooltip();
+        
         const tooltipElement = document.createElement("div");
         tooltipElement.id = this.id;
 
@@ -208,10 +232,13 @@ export default defineContentScript({
                 setTooltipTimeout(options.delayTime, word, event);
               }
             } else {
+              // Cancel any pending requests when mouse moves away from text
               if (activeTimeout) {
                 clearTimeout(activeTimeout);
                 activeTimeout = undefined;
               }
+              // Invalidate current request
+              currentRequestId++;
               removeTooltip();
             }
           }
