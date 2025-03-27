@@ -26,14 +26,14 @@ export interface TooltipOptions {
  */
 export const defaultOptions: TooltipOptions = {
   active: true,
-  tooltipYOffset: 30,
+  tooltipYOffset: 15,
   tooltipYPosition: "down",
   fontSize: 9,
   fontWeight: "normal",
-  textColor: "#333333", // Darker text for better contrast in light mode
+  textColor: "#333333",
   backgroundGradColorTop: "#ffffff",
-  backgroundGradColorBottom: "#f9fafc", // Light gray background for Toss-inspired design
-  borderColor: "#dfe3e9", // Subtle border color
+  backgroundGradColorBottom: "#f9fafc",
+  borderColor: "#a1aabb",
   delayTime: 200
 };
 

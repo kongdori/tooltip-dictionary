@@ -147,14 +147,14 @@ export default defineContentScript({
         // Set Toss-inspired light mode design
         tooltipElement.style.setProperty("background", `linear-gradient(to bottom, ${options.backgroundGradColorTop}, ${options.backgroundGradColorBottom})`);
         tooltipElement.style.setProperty("display", "block");
-        tooltipElement.style.setProperty("padding", "8px 12px");
+        tooltipElement.style.setProperty("padding", "2px 6px");
         tooltipElement.style.setProperty("position", "absolute");
         tooltipElement.style.setProperty("z-index", "2147483647");
         tooltipElement.style.setProperty("font-size", `${options.fontSize}pt`);
         tooltipElement.style.setProperty("font-weight", options.fontWeight);
         tooltipElement.style.setProperty("color", options.textColor);
-        tooltipElement.style.setProperty("border-radius", "8px");
-        tooltipElement.style.setProperty("box-shadow", "0 2px 8px rgba(0,0,0,0.1)");
+        tooltipElement.style.setProperty("border-radius", "4px");
+        tooltipElement.style.setProperty("box-shadow", "0 1px 4px rgba(0,0,0,0.1)");
         tooltipElement.style.setProperty("border", `1px solid ${options.borderColor}`);
         tooltipElement.style.setProperty("font-family", "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif");
 
