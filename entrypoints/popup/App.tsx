@@ -51,12 +51,12 @@ function App() {
         <div className="popup-content">
           <div className="setting-group">
             <div className="setting-row">
-              <label htmlFor="delayTime_control">Delay Time</label>
+              <label htmlFor="delay-time-control">Delay Time</label>
               <span className="value-display">{delayTime}ms</span>
             </div>
             <input 
               type="range" 
-              id="delayTime_control" 
+              id="delay-time-control" 
               min={delayTimeMin} 
               max={delayTimeMax} 
               step="100"
@@ -68,12 +68,12 @@ function App() {
           
           <div className="setting-group">
             <div className="setting-row">
-              <label htmlFor="fontSize_control">Font Size</label>
+              <label htmlFor="font-size-control">Font Size</label>
               <span className="value-display">{fontSize}</span>
             </div>
             <input 
               type="range" 
-              id="fontSize_control" 
+              id="font-size-control" 
               min={fontSizeMin} 
               max={fontSizeMax} 
               step="1"
@@ -84,9 +84,9 @@ function App() {
           </div>
           
           <div className="setting-group">
-            <label htmlFor="tooltipPosition_control">Tooltip Position</label>
+            <label htmlFor="tooltip-position-control">Tooltip Position</label>
             <select 
-              id="tooltipPosition_control"
+              id="tooltip-position-control"
               value={tooltipPosition}
               onChange={(e) => setTooltipPosition(e.target.value)}
               className="select-input"
