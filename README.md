@@ -6,6 +6,7 @@
 ## Goals
 * Chrome 확장 Manifest V3 지원 추가
 * Chrome 확장 스토어에 업로드
+* 유지보수성 개선을 위한 WXT 마이그레이션
 
 ## Notes
 * 소스 출처: https://chromewebstore.google.com/detail/tooltip-dictionary/kibbnopaghnmdlmocibfmnljlihmlgip
@@ -16,3 +17,4 @@
   * [tooltip-dictionary](https://github.com/seoh/tooltip-dictionary)
 * https://chromewebstore.google.com/detail/ddoapcmacpdaiimdpelaolkeacbhbbgj 에서 다운로드 가능.
 * 그러나 네이버 서버가 갑자기 작동을 멈춰서... 확장도 작동이 안됨...
+* 일단 간단하게 Gemini API 이용해서 물어보도록 함. 돈 많이 나가면 그건 그 때 생각해 보자...
