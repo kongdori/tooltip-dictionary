@@ -5,32 +5,37 @@ function App() {
   const [active, setActive] = useState(false);
   const [delayTime, setDelayTime] = useState(300);
   const [fontSize, setFontSize] = useState(10);
-  const [tooltipPosition, setTooltipPosition] = useState('Up');
+  const [tooltipPosition, setTooltipPosition] = useState('Down');
+  const [isLoaded, setIsLoaded] = useState(false);
   
-  // Options for selects and sliders
   const delayTimeMin = 100;
   const delayTimeMax = 1000;
   const fontSizeMin = 5;
   const fontSizeMax = 15;
   const positionOptions = ['Up', 'Down'];
 
-  // Load saved settings when component mounts
+  const defaultSettings = {
+    active: true,
+    delayTime: 300,
+    fontSize: 10,
+    tooltipPosition: 'Down'
+  };
+
   useEffect(() => {
-    // This would typically fetch from Chrome storage API
-    // For now just using placeholder values
-    setActive(true);
-    setDelayTime(300); // default to 300ms
-    setFontSize(10); // default to 10
-    setTooltipPosition(positionOptions[0]); // default to up
+    browser.storage.sync.get(defaultSettings, (items) => {
+      setActive(items.active);
+      setDelayTime(items.delayTime);
+      setFontSize(items.fontSize);
+      setTooltipPosition(items.tooltipPosition);
+      setIsLoaded(true);
+    });
   }, []);
 
-  // Save settings when they change
   useEffect(() => {
-    if (tooltipPosition) {
-      // Would typically save to Chrome storage API
-      console.log('Saving settings:', { active, delayTime, fontSize, tooltipPosition });
+    if (isLoaded) {
+      browser.storage.sync.set({ active, delayTime, fontSize, tooltipPosition });
     }
-  }, [active, delayTime, fontSize, tooltipPosition]);
+  }, [active, delayTime, fontSize, tooltipPosition, isLoaded]);
 
   return (
     <div className="popup-container">
