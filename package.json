@@ -1,8 +1,8 @@
 {
-  "name": "wxt-react-starter",
-  "description": "manifest.json description",
+  "name": "Tooltip Dictionary",
+  "description": "영어 단어 위에 마우스를 올려 놓으면 툴팁으로 한국어 단어가 나옵니다.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.4.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
