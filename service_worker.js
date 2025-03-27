@@ -61,13 +61,18 @@ const changeIcon = function(isActive) {
 // Register message listener at the top level of the script
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.query) {
-    const url = `http://tooltip.dic.naver.com/tooltip.nhn?wordString=${encodeURIComponent(request.query.toLowerCase())}&languageCode=4&nlp=false`;
+    const url = `https://api.100factories.com/api/v1/dictionary/tooltip?term=${encodeURIComponent(request.query.toLowerCase())}&sourceLocale=en-US&targetLocale=ko-KR`;
     
     // Using fetch and handling the response properly for service workers
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Authorization": `Basic ${btoa("tooltip-dictionary:47a542829d42ca0031d3bcae2fa92223005986dc1e24649284e1d6543a41b25e")}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then(response => response.json())
       .then(data => {
-        sendResponse(data && data.mean ? { word: request.query, mean: data.mean } : null);
+        sendResponse(data && data.isTranslatable ? { word: data.root, mean: data.translations } : null);
       })
       .catch(error => {
         console.error("Error fetching dictionary data:", error);
