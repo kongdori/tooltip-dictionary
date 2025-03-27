@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   const defaultSettings = {
     active: true,
-    delayTime: 300,
+    delayTime: 200,
     fontSize: 10,
     tooltipPosition: 'Down'
   };
@@ -19,7 +19,7 @@ function App() {
   const delayTimeMax = 1000;
   const fontSizeMin = 5;
   const fontSizeMax = 15;
-  const positionOptions = ['Up', 'Down'];
+  const positionOptions = ['Down', 'Up'];
 
   useEffect(() => {
     browser.storage.sync.get(defaultSettings, (items) => {
