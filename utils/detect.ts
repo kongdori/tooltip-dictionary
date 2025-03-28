@@ -19,15 +19,27 @@ function isWordBoundary(char: string): boolean {
  * Extracts a word from a click position
  */
 export default function detectWord(position: Position): string {
+  let node, offset;
+
   // Get text node at position using modern API
-  const range = document.caretRangeFromPoint(position.x, position.y);
-  if (!range) return "";
+  if (document.caretPositionFromPoint) {
+    const pos = document.caretPositionFromPoint(position.x, position.y);
+    if (pos) {
+      node = pos.offsetNode;
+      offset = pos.offset;
+    }
+  } else if (document.caretRangeFromPoint) {
+    const range = document.caretRangeFromPoint(position.x, position.y);
+    if (range) {
+      node = range.startContainer;
+      offset = range.startOffset;
+    }
+  }
   
-  const node = range.startContainer;
-  const offset = range.startOffset;
+  if (!node || !offset) return "";
   
   // Ensure we have a valid text node
-  if (!node || node.nodeType !== Node.TEXT_NODE || !node.textContent) return "";
+  if (node.nodeType !== Node.TEXT_NODE || !node.textContent) return "";
   
   const text = node.textContent;
   
