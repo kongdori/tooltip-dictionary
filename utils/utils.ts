@@ -17,7 +17,7 @@ export function domReady(): Promise<void> {
 }
 
 // Icon paths for inactive state
-export const inactiveIcons = {
+const inactiveIcons = {
   16: "icon/nonactive16.png",
   32: "icon/nonactive32.png",
   48: "icon/nonactive48.png",
@@ -26,7 +26,7 @@ export const inactiveIcons = {
 };
 
 // Icon paths for active state
-export const activeIcons = {
+const activeIcons = {
   16: "icon/active16.png",
   32: "icon/active32.png",
   48: "icon/active48.png",
@@ -40,11 +40,4 @@ export const activeIcons = {
 export async function changeIcon(isActive: boolean): Promise<void> {
   const iconPaths = isActive ? activeIcons : inactiveIcons;
   await browser.action.setIcon({ path: iconPaths });
-}
-
-/**
- * Send a message to the background script
- */
-export async function sendMessage<T>(message: any): Promise<T> {
-  return await browser.runtime.sendMessage(message);
 }
