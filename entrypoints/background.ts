@@ -48,7 +48,7 @@ export default defineBackground(async () => {
         .then(response => response.json())
         .then(data => {
           clearTimeout(timeoutId);
-          sendResponse(data && data.isTranslatable ? { word: data.root, mean: data.translations } : null);
+          sendResponse(data && data.translations.length > 0 ? { word: request.query, mean: data.translations } : null);
         })
         .catch(error => {
           clearTimeout(timeoutId);
