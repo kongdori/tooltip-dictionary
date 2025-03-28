@@ -2,8 +2,6 @@ import { defineBackground } from 'wxt/sandbox';
 import { browser } from 'wxt/browser';
 
 export default defineBackground(async () => {
-  console.log('Tooltip Dictionary background initialized', { id: browser.runtime.id });
-  
   // Listen for extension installation or update
   browser.runtime.onInstalled.addListener(async () => {
     try {
