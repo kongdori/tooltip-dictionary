@@ -1,16 +1,12 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { browser } from 'wxt/browser';
 import detectWord from '@/utils/detect';
-
-// Used to track the latest tooltip request
-let currentRequestId = 0;
+import { debounce } from 'lodash';
 
 export default defineContentScript({
   matches: ['*://*/*'],
   main() {
     const TOOLTIP_ID = "tooltip-dictionary-popup";
-    let activeTimeout: number | undefined = undefined;
-    let activeRequestId = 0;
 
     /**
      * Checks if a tooltip for a specific word is already displayed
@@ -31,24 +27,10 @@ export default defineContentScript({
     }
 
     /**
-     * Sets a timeout to display the tooltip
+     * Creates a tooltip directly without timeout management
      */
-    function setTooltipTimeout(delay: number, word: string, event: MouseEvent): void {
-      if (activeTimeout) {
-        clearTimeout(activeTimeout);
-      }
-      
-      // Increment request ID for each new request
-      activeRequestId = ++currentRequestId;
-      const requestId = activeRequestId;
-
-      activeTimeout = window.setTimeout(() => {
-        activeTimeout = undefined;
-        // Only create a tooltip if this is still the active request
-        if (requestId === currentRequestId) {
-          new TooltipHandler(word, event, requestId);
-        }
-      }, delay);
+    function createTooltip(word: string, event: MouseEvent): void {
+      new TooltipHandler(word, event);
     }
 
     /**
@@ -66,21 +48,19 @@ export default defineContentScript({
       id: string;
       word: string;
       event: MouseEvent;
-      requestId: number;
 
       /**
        * Creates a new tooltip handler
        */
-      constructor(word: string, event: MouseEvent, requestId: number) {
+      constructor(word: string, event: MouseEvent) {
         this.id = TOOLTIP_ID;
         this.word = word;
         this.event = event;
-        this.requestId = requestId;
 
         Promise.all([this.translate(), getOptions()])
           .then(([translation, options]) => {
-            // Only render if this is still the active request
-            if (this.requestId === currentRequestId && translation != null) {
+            // Render if translation was successful
+            if (translation != null) {
               this.renderTooltip(translation, options);
             }
           })
@@ -157,10 +137,6 @@ export default defineContentScript({
        * Renders the tooltip with translation results
        */
       renderTooltip(translation: TranslationResult, options: any): void {
-        // Double-check this is still the active request before rendering
-        if (this.requestId !== currentRequestId) {
-          return;
-        }
         
         // Remove any existing tooltip first
         removeTooltip();
@@ -218,6 +194,19 @@ export default defineContentScript({
 
     // Initialize the extension when DOM is ready
     domReady().then(() => {
+      let lastRequestedWord = "";
+      
+      // Create a debounced function for showing tooltips
+      const debouncedShowTooltip = debounce((word: string, event: MouseEvent) => {
+        // If the same word is requested, do nothing
+        if (word === lastRequestedWord) {
+          return;
+        }
+        
+        lastRequestedWord = word;
+        createTooltip(word, event);
+      }, 200); // Default delay, will be updated from options
+
       document.addEventListener('mousemove', async (event) => {
         try {
           const options = await getOptions(['active', 'delayTime']);
@@ -226,18 +215,26 @@ export default defineContentScript({
             const word = detectWord({ x: event.clientX, y: event.clientY });
 
             if (word !== "") {
+              const tooltip = document.getElementById(TOOLTIP_ID);
+              
+              // If the tooltip is already displayed for a different word, remove it
+              if (tooltip && tooltip.dataset.word && tooltip.dataset.word !== word) {
+                removeTooltip();
+              }
+              
               if (!isTooltipDisplayed(word)) {
-                setTooltipTimeout(options.delayTime, word, event);
+                // Update the delay time dynamically
+                debouncedShowTooltip.cancel();
+                debouncedShowTooltip.delay = options.delayTime;
+                debouncedShowTooltip(word, event);
               }
             } else {
-              // Cancel any pending requests when mouse moves away from text
-              if (activeTimeout) {
-                clearTimeout(activeTimeout);
-                activeTimeout = undefined;
-              }
-              // Invalidate current request
-              currentRequestId++;
+              // Cancel pending show operations and immediately remove tooltip
+              debouncedShowTooltip.cancel();
               removeTooltip();
+              
+              // Reset last requested word if mouse leaves the text
+              lastRequestedWord = "";
             }
           }
         } catch (error) {
