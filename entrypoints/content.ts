@@ -82,7 +82,7 @@ export default defineContentScript({
         Promise.all([this.translate(), getOptions()])
           .then(([translation, options]) => {
             // Only render if this is still the active request
-            if (this.requestId === currentRequestId) {
+            if (this.requestId === currentRequestId && translation != null) {
               this.renderTooltip(translation, options);
             }
           })
@@ -205,7 +205,7 @@ export default defineContentScript({
       /**
        * Sends a message to the background script to translate the word
        */
-      async translate(): Promise<TranslationResult> {
+      async translate(): Promise<TranslationResult | null> {
         const message = { query: this.word };
 
         try {
@@ -213,7 +213,7 @@ export default defineContentScript({
           return response;
         } catch (error) {
           console.error('Error translating word:', error);
-          return { word: this.word, mean: ['Translation unavailable'] };
+          return null;
         }
       }
     }
