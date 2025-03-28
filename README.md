@@ -2,7 +2,7 @@
 - [Chrome Web Store에서 다운로드](https://chromewebstore.google.com/detail/ddoapcmacpdaiimdpelaolkeacbhbbgj)
 - 기존 확장 프로그램을 이어받아 유지보수 및 개선 진행 중입니다.
 - ✅ Manifest V2 → V3 마이그레이션 완료. 더 이상 Chrome이 삭제하거나 불평하지 않음.
-- ✅ 다운된 네이버 사전 API 서버 대신, 생성형 AI 모델을 활용 완료. 일단 개발자 사비로 비용 지출.
+- ✅ 다운된 네이버 사전 API 서버 대신, Gemini 2.0 Flash-Lite 모델 활용. 일단 개발자 사비로 비용 지출.
 - ✅ 유지보수성 개선을 위한 WXT 프레임워크 마이그레이션 완료.
 - ✅ 확장 프로그램 UI 개선, 단어 추출 알고리즘 정확도 향상 완료.
 
