@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { getOptions, setOptions, TooltipOptions } from '../../utils/optionStorage';
 import './App.css';
+
+type TooltipPosition = 'up' | 'down';
 
 function App() {
   const [active, setActive] = useState(true);
   const [delayTime, setDelayTime] = useState(200);
-  const [fontSize, setFontSize] = useState(10);
-  const [tooltipPosition, setTooltipPosition] = useState('down');
+  const [fontSize, setFontSize] = useState(10); 
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>('down');
   const [isLoaded, setIsLoaded] = useState(false);
   
   const delayTimeMin = 100;
@@ -111,7 +112,7 @@ function App() {
             <select 
               id="tooltip-position-control"
               value={tooltipPosition}
-              onChange={(e) => setTooltipPosition(e.target.value)}
+              onChange={(e) => setTooltipPosition(e.target.value as TooltipPosition)}
               className="select-input"
             >
               {positionOptions.map((option) => (

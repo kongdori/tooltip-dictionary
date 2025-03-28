@@ -1,7 +1,5 @@
 import { defineBackground } from 'wxt/sandbox';
 import { browser } from 'wxt/browser';
-import { changeIcon } from '../utils/utils';
-import { getOptions, setOptions, defaultOptions, TooltipOptions } from '../utils/optionStorage';
 
 export default defineBackground(async () => {
   console.log('Tooltip Dictionary background initialized', { id: browser.runtime.id });

@@ -1,8 +1,6 @@
 import { defineContentScript } from 'wxt/sandbox';
 import { browser } from 'wxt/browser';
-import { domReady } from '../utils/utils';
-import { getOptions } from '../utils/optionStorage';
-import detectWord from '../utils/detect';
+import detectWord from '@/utils/detect';
 
 // Used to track the latest tooltip request
 let currentRequestId = 0;
