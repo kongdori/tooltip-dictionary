@@ -7,7 +7,11 @@
 - ✅ 확장 프로그램 UI 개선, 단어 추출 알고리즘 정확도 향상 완료.
 
 ## Screenshots
-![스크린샷 툴팁](screenshot_tooltip.png) ![스크린샷 팝업](screenshot_popup.png)
+<p align="center">
+  <img alt="Light" src="./screenshot_tooltip.png" width="45%">
+&nbsp; &nbsp; &nbsp; &nbsp;
+  <img alt="Dark" src="./screenshot_popup.png" width="45%">
+</p>
 
 ## Notes
 - 소스 출처: https://chromewebstore.google.com/detail/tooltip-dictionary/kibbnopaghnmdlmocibfmnljlihmlgip
