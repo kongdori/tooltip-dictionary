@@ -32,7 +32,7 @@ export default defineBackground(async () => {
   // Set up message listener for dictionary lookups
   browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
     if (request && request.query) {
-      const url = `https://api.100factories.com/api/v1/dictionary/tooltip?term=${encodeURIComponent(request.query.toLowerCase())}&sourceLocale=en-US&targetLocale=ko-KR`;
+      const url = `https://api.100factories.com/api/v1/dictionary/tooltip?term=${encodeURIComponent(request.query)}&targetLocale=ko-KR`;
       
       // Add timeout of 3 seconds for the fetch request
       const controller = new AbortController();
